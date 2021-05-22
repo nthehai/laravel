@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="{{URL::asset('admin/img/apple-icon.png')}}">
+  <link rel="icon" type="image/png" href="{{URL::asset('admin/img/favicon.png')}}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>
+    Dashboard Admin
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{{URL::asset('admin/css/bootstrap.min.css')}}" rel="stylesheet" />
+  <link href="{{URL::asset('admin/css/paper-dashboard.css?v=2.0.1')}}" rel="stylesheet" />
+  <link href="{{URL::asset('admin/demo/demo.css')}}" rel="stylesheet" />
+</head>
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+      <div class="logo">
+        <a href="https://www.creative-tim.com" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="{{URL::asset('admin/img/logo-small.png')}}">
+          </div>
+        </a>
+        <a href="http://localhost:81/tudanhgia1/public/" class="simple-text logo-normal">TRANG CHỦ</a>
+
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <ul class="nav navbar-nav navbar-right">
+              @if (Auth::guest())
+                <li><a href="{{ url('/login') }}">Login</a></li>
+                <li><a href="{{ url('/register') }}">Register</a></li>
+              @else
+                <li class="dropdown">
+
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="nc-icon nc-single-02"></i>
+                  {{ Auth::user()->name }}
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                      <li>
+                        <a href="{{ url('/logout') }}"
+                        onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                          {{ csrf_field() }}
+                        </form>
+                      </li>
+                  </ul>
+                </li>
+              @endif
+            </ul>
+          </li>
+          <li>
+            <a href="{{URL::to('/home')}}">
+              <i class="nc-icon nc-bank"></i>
+              <p>Bảng điều khiển</p>
+            </a>
+          </li>
+          <li>
+            <a href="{{URL::to('/admin/news/create')}}">
+              <i class="nc-icon nc-diamond"></i>
+              <p>Tạo tài khoản</p>
+            </a>
+          </li>
+          <li>
+            <a href="{{URL::to('/danh-sach')}}">
+              <i class="nc-icon nc-pin-3"></i>
+              <p>Danh sách đơn vị</p>
+            </a>
+          </li>
+          <li>
+            <a href="{{URL::to('/list-users')}}">
+              <i class="nc-icon nc-single-02"></i>
+              <p>Danh sách tài khoản</p>
+            </a>
+          </li>
+          <li>
+            <a href="{{URL::to('/list-form')}}">
+              <i class="nc-icon nc-tile-56"></i>
+              <p>Danh sách đánh giá</p>
+            </a>
+          </li>
+          <li>
+            <a href="{{URL::to('/thong_ke')}}">
+              <i class="nc-icon nc-chart-bar-32"></i>
+              <p>Thống kê và xếp hạng</p>
+            </a>
+          </li>
+          <li>
+            <a href="{{URL::to('/search')}}">
+              <i class="nc-icon nc-zoom-split"></i>
+              <p>Tìm kiếm</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+<div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:;" style="color:red">DANH SÁCH FORM ĐÁNH GIÁ</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <form>
+              <div class="input-group no-border">
+                <input type="text" value="" class="form-control" placeholder="Tìm kiếm...">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <i class="nc-icon nc-zoom-split"></i>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link btn-magnify" href="javascript:;">
+                  <i class="nc-icon nc-layout-11"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Stats</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item btn-rotate dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="nc-icon nc-bell-55"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Một số hoạt động</span>
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="#">Hoạt động</a>
+                  <a class="dropdown-item" href="#">Khác</a>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn-rotate" href="javascript:;">
+                  <i class="nc-icon nc-settings-gear-65"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Tài khoản</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+<!-- End Navbar -->
+<div class="content">
+    <div class="table-agile-info">
+        <div class="panel panel-default">
+            <div class="table-responsive">
+                <?php
+                $message = Session::get('message');
+                if ($message) {
+                    echo '<span class="text-alert">', $message, '</span>';
+                    Session::put('message', null);
+                }
+                ?>
+                <style type="text/css">
+                  *{
+                    font-family: sans-serif;
+                  }
+                  table{
+                      border:1px solid black;
+                      width: 100%;
+
+                  }
+                  th{
+                      border:1px solid black;
+                      height: 50px;
+                  }
+                  td{
+                      border:1px solid black;
+                      height: 50px;
+                  }
+                  tr:hover{
+                      background-color:#ddd;
+                      cursor:pointer;
+                  }
+                </style>
+                <table>
+                  
+                  <tr>
+                    <th style="background-color:skyblue">Mã đơn vị đào tạo</th>
+                    @foreach($news as $row)
+                    <td>{{$row->id}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">1.1.Năng lực thực hiện các chỉ tiêu chiến lược của đơn vị</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_1_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">1.2.Kết quả thực hiện chỉ tiêu chiến lược</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_1_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">1.3.Uy tín của lãnh đạo đơn vị </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_1_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.1.Kết quả đào tạo</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.2.Quy mô giảng viên </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.3.Trình độ giảng viên</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.4.Uy tín giảng viên </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_4}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.5.Quy mô đào tạo thạc sĩ </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.6.Quy mô đào tạo tiến sĩ </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_6}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.7.Mức độ hài lòng của người học</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_7}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.8.Mức độ hài lòng của nhà tuyển dụng</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_8}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.9.Việc làm của người học</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_9}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.10.Tỷ lệ các giải thưởng về học thuật của người học</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_10}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">2.11.Kiểm định và xếp hạng</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_2_11}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">3.1.Công bố khoa học</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_3_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">3.2.Công bố trong danh mục ISI/Scopus</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_3_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">3.3.Sách chuyên khảo/giáo trình</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_3_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">3.4.Giải thưởng KH&CN</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_3_4}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">3.5.Kinh phí cho hoạt động KH&CN</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_3_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">4.1.Sở hữu trí tuệ </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_4_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">4.2.Hợp tác nghiên cứu không sử dụng ngân sách nhà nước</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_4_2}}</td>
+                    @endforeach
+                  </tr>
+
+                  <tr>
+                    <th style="background-color:skyblue">4.3.Số doanh nghiệp khởi nghiệp</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_4_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">4.4.Môi trường đào tạo gắn với nghiên cứu và ứng dụng </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_4_4}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">4.5.Không gian sáng tạo và hỗ trợ khởi nghiệp</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_4_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">4.6.Đối tác doanh nghiệp
+
+</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_4_6}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.1.Năng lực ứng dụng công nghệ thông tin phục vụ quản lý</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.2.Khả năng phân tích và quản trị chất lượng</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.3.Tài nguyên số </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.4.Học liệu số</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_4}}</td>
+                    @endforeach
+                  </tr>
+
+                  <tr>
+                    <th style="background-color:skyblue">5.5.Mức độ tương tác học thuật trực tuyến</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.6.Bài giảng điện tử </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_6}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.7.Ứng dụng hệ thống thực - ảo (Cyber-Physical System)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_7}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.8.Hệ thống mạng không dây </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_8}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.9.Phần mềm kiểm tra sự trùng lặp thông tin </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_9}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">5.10.Mức độ lan tỏa học thuật </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_5_10}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.1.Đào tạo bằng tiếng nước ngoài</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.2.Đào tạo liên kết quốc tế</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.3.Người học quốc tế </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.4.Giảng viên quốc tế </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_4}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.5.Sinh viên quốc tế trao đổi </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.6.Giảng viên đi trao đổi</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_6}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.7.Sinh viên đi trao đổi</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_7}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.8.Hội nghị, hội thảo quốc tế </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_8}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.9.Hợp tác quốc tế về nghiên cứu</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_6_9}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">6.10.Kinh phí hợp tác nghiên cứu</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_1_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">7.1.Truyền thông hình ảnh của đơn vị tới cộng đồng</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_7_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">7.2.Xây dựng hệ thống ấn phẩm nhận diện thương hiệu</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_7_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">7.3.Chuyển giao tri thức và công nghệ </th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_7_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">7.4.Phát triển bền vững</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_7_4}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">7.5.Các loại hình hoạt động phục vụ cộng đồng</th>
+                    @foreach($news as $row)
+                    <td>{{$row->tc_7_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 1. Quản trị chiến lược (100 điểm)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_1}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 2. Đào tạo (295 điểm)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_2}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 3. Nghiên cứu (245 điểm)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_3}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 4. Đổi mới sáng tạo (120 điểm)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_4}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 5. Công nghệ thông tin và tài nguyên số (90 điểm) </th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_5}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 6. Mức độ quốc tế hóa (80 điểm)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_6}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm tiêu chuẩn 7. Truyền thông và phục vụ cộng đồng (70 điểm)</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Standard_7}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng điểm</th>
+                    @foreach($news as $row)
+                    <td>{{$row->Tong_Diem}}</td>
+                    @endforeach
+                  </tr>
+                  <tr>
+                    <th style="background-color:skyblue">Tổng sao</th>
+                    @foreach($news as $row)
+                    <td>{{$row->gan_sao}}</td>
+                    @endforeach
+                  </tr>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="{{URL::asset('admin/js/core/jquery.min.js')}}"></script>
+<script src="{{URL::asset('admin/js/core/popper.min.js')}}"></script>
+<script src="{{URL::asset('admin/js/core/bootstrap.min.js')}}"></script>
+<script src="{{URL::asset('admin/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<script src="{{URL::asset('admin/js/plugins/chartjs.min.js')}}"></script>
+<script src="{{URL::asset('admin/js/plugins/bootstrap-notify.js')}}"></script>
+<script src="{{URL::asset('backend/js/bootstrap.js')}}"></script>
+<script src="{{URL::asset('admin/js/paper-dashboard.min.js?v=2.0.1')}}" type="text/javascript"></script>
+<script src="{{URL::asset('admin/demo/demo.j')}}"></script>
+<script>
+  $(document).ready(function() {
+    demo.initChartsPages();
+  });
+</script>
+<style type="text/css">
+    input[type=file] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #58257b;
+      border-radius: 4px;
+    }
+    input[type=text] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #58257b;
+      border-radius: 4px;
+    }
+</style>
+</body>
+</html>
